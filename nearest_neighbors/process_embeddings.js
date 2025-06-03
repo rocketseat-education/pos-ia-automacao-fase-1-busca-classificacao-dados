@@ -1,4 +1,4 @@
-import fs, { writeFileSync } from "fs"
+import fs from "fs"
 
 const files = fs.readdirSync("./embeddings").map(f => "./embeddings/" + f);
 
@@ -15,4 +15,4 @@ for (let embedding of embeddings) {
     embedding["class"] = embedding["path"].includes("cat") ? "cat" : "dog";
 }
 
-fs.writeFileSync("./embeddings.json", JSON.stringify(embeddings));
+fs.writeFileSync("./embeddings.json", JSON.stringify())
