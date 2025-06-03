@@ -33,7 +33,7 @@ let csvOutput = [];
 
 for (let i=0; i<tsneInput.length; i++){
     csvOutput.push({
-        class: tsneInput[i]["class"],
+        class: tsneInput[i]["class"] == "dog" ? "orange" : "blue",
         x: output[i][0],
         y: output[i][1]
     })
