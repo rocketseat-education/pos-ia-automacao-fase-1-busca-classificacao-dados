@@ -28,6 +28,7 @@
     "test": ""
   },
   "dependencies": {
+    "csv-writer": "^1.6.0",
     "tsne-js": "^1.0.3"
   }
 }
