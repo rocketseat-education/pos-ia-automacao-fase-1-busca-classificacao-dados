@@ -66,4 +66,30 @@ function knnClassifier(testEmbedding, k){
     return predictedClass;
 }
 
-console.log(knnClassifier(testEmbeddings[0], 5));
+function calculateAccuracy(results){
+    let nCorrect = 0;
+
+    for (let result of results){
+        if(result["predictedClass"] == result["trueClass"]){
+            nCorrect++;
+        } 
+    }
+
+    return nCorrect / results.length;
+}
+
+let predictedClasses = []; 
+
+for(let testEmbedding of testEmbeddings){
+    const predictedClass = knnClassifier(testEmbedding, 5);
+
+    predictedClasses.push({
+        path: testEmbedding["path"],
+        predictedClass: predictedClass,
+        trueClass: testEmbedding["class"]
+    });
+}
+
+console.log(calculateAccuracy(predictedClasses));
+
+console.log(predictedClasses.filter(r => r["predictedClass"] != r["trueClass"])[0])
