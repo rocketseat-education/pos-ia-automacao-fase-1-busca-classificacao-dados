@@ -8,27 +8,29 @@ const genai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const embeddings = JSON.parse(fs.readFileSync("../nearest_neighbors/embeddings.json"));
 
-const testEmbeddings = embeddings.filter(e => e["split"] == "test").map(e => "../nearest_neighbors" + e["path"].slice(1));
+const testPaths = embeddings.filter(e => e["split"] == "test").map(e => "../nearest_neighbors" + e["path"].slice(1));
 
-const image = await genai.files.upload({
-    file: testEmbeddings[50],
-    config: { mimeType: "image/jpeg" }
-});
+function readImg(path){
+    return fs.readFileSync(path, { encoding: "base64" });
+}
 
-const response = await genai.models.generateContent({
-    model: "gemini-2.0-flash",
-    contents: createUserContent([
-        createPartFromUri(image.uri, image.mimeType),
-        `
-        Identifique se a imagem contém gatos ou cachorros.
-        Retorne uma das seguintes categorias de acordo com o conteúdo da imagem:
-        'cat' caso a imagem contenha um ou mais gatos ou
-        'dog' caso a imagem contenha um ou mais cachorros
+function toInlineData(imgBase64){
+    return {
+        inlineData: {
+            mimeType: "image/jpeg",
+            data: imgBase64
+        }
+    }
+}
 
-        também retorne a cor do animal identificado.
-        `
-    ]),
-    config: {
+const prompt = `
+Identifique se a imagem contém gatos ou cachorros.
+Retorne uma das seguintes categorias de acordo com o conteúdo da imagem:
+'cat' caso a imagem contenha um ou mais gatos ou
+'dog' caso a imagem contenha um ou mais cachorro
+`
+
+const outputConfig = {
         responseMimeType: "application/json",
         responseSchema: {
             type: "array",
@@ -42,7 +44,25 @@ const response = await genai.models.generateContent({
                 }
             }
         }
-    }
+    };
+
+async function geminiRequest(contents){
+    const response = await genai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: contents,
+        config: outputConfig
 });
 
-console.log(response.text);
+    return response;
+}
+
+async function llmClassifier(path){
+    const imgBase64 = readImg(path);
+    const imgInlineData = toInlineData(imgBase64);
+    const contents = [imgInlineData, {text: prompt}];
+    const response = await geminiRequest(contents);
+
+    return JSON.parse(response.text)[0]["category"];
+}
+
+console.log(await llmClassifier(testPaths[0]));
