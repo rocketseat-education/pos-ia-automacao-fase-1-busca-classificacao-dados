@@ -8,7 +8,12 @@ const genai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const embeddings = JSON.parse(fs.readFileSync("../nearest_neighbors/embeddings.json"));
 
-const testPaths = embeddings.filter(e => e["split"] == "test").map(e => "../nearest_neighbors" + e["path"].slice(1));
+const testInstances = embeddings.filter(e => e["split"] == "test").map(e => {
+    return {
+        trueClass: e["class"],
+        path:  "../nearest_neighbors" + e["path"].slice(1)
+    }
+});
 
 function readImg(path){
     return fs.readFileSync(path, { encoding: "base64" });
@@ -65,4 +70,26 @@ async function llmClassifier(path){
     return JSON.parse(response.text)[0]["category"];
 }
 
-console.log(await llmClassifier(testPaths[0]));
+function calculateAccuracy(results){
+    let nCorrect = 0;
+
+    for (let result of results){
+        if(result["predictedClass"] == result["trueClass"]){
+            nCorrect++;
+        } 
+    }
+
+    return nCorrect / results.length;
+}
+
+const requests = testInstances.map(i => llmClassifier(i["path"]));
+
+await Promise.all(requests);
+
+console.log(requests);
+
+for(let i=0; i<testInstances.length; i++){
+    testInstances[i]["predictedClass"] = await requests[i];
+}
+
+console.log(calculateAccuracy(testInstances));
