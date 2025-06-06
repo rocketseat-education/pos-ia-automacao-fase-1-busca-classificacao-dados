@@ -5,9 +5,19 @@ function App() {
 const [textInput, setTextInput] = useState(null);
 const [imgSrc, setImgSrc] = useState(null);
 
-function classify(){
+async function classify(){
   console.log(textInput);
   setImgSrc(textInput);
+
+  const response = await fetch("http://127.0.0.1:3000/classify", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({method: "knn", imgPath: textInput})
+  });
+
+  console.log(await response.json());
 }
 
   return (
