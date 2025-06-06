@@ -28,6 +28,8 @@
     "test": ""
   },
   "dependencies": {
-    "@huggingface/transformers": "^3.5.2"
+    "@google/genai": "^1.4.0",
+    "@huggingface/transformers": "^3.5.2",
+    "dotenv": "^16.5.0"
   }
 }

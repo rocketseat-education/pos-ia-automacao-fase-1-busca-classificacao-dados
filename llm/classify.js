@@ -1,5 +1,5 @@
 import fs from "fs";
-import { createPartFromUri, createUserContent, GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from 'dotenv';
 import { type } from "os";
 dotenv.config();
