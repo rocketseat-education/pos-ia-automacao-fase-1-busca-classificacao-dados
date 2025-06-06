@@ -1,7 +1,6 @@
-import { pipeline } from "@huggingface/transformers";
 import fs from "fs";
-import { start } from "repl";
 
+import { pipeline } from "@huggingface/transformers";
 const imgEmbedder = await pipeline("image-feature-extraction", "Xenova/clip-vit-base-patch32", { dtype: "fp32" });
 
 async function embedImg(imgs){
