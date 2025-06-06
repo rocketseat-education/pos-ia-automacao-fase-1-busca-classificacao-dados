@@ -1,4 +1,4 @@
-import embedImg from "./embedder.js";
+import ImageEmbedder from "./embedder.js";
 import { cos_sim } from "@huggingface/transformers";
 
 function compare(testEmbedding, knowledgeBase){
@@ -53,7 +53,7 @@ function getMaxClass(classCount){
 }
 
 export default async function knnClassifier(path, k, knowledgeBase){
-    const embedding = await embedImg(path);
+    const embedding = await ImageEmbedder.embedImg(path);
     const distances = compare(embedding, knowledgeBase);
     const knn = getKNearestNeighbors(distances, k);
     const classCount = countClasses(knn);
