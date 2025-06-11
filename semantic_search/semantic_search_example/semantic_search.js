@@ -20,3 +20,22 @@ const embeddings = await getEmbedding(movieTexts);
 for(let i = 0; i < movies.length; i++) {
     movies[i]["embedding"] = embeddings[i];
 }
+
+const query = "Cars and desert";
+const queryEmbedding = (await getEmbedding(query))[0];
+
+for (let movie of movies) {
+    movie["similarity"] = cos_sim(queryEmbedding, movie["embedding"]);
+}
+
+movies.sort((a, b) => {
+    if (a.similarity > b.similarity) {
+        return 1;
+    } else {
+        return -1;
+    }
+})
+
+console.log(movies);
+
+
