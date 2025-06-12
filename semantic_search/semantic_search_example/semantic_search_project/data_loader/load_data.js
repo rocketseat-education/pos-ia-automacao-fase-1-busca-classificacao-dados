@@ -19,10 +19,21 @@ fs.createReadStream("mpst_full_data.csv")
     metadatas.push(document);
 })
 .on('end', async () => {
-    await collection.add({
-    ids: ids,
-    documents: documents,
-    metadatas: metadatas,
-    });
+    let startIdx = 0;
+
+    while(startIdx < ids.length) {
+        let endIdx = startIdx + 500; // ajustar essa quantidade de acordo com o seu hardware, quanto maior o valor, maior o processamento necessário
+        console.log(`Adding documents from ${startIdx} to ${endIdx}`)
+
+        await collection.add({
+            ids: ids.slice(startIdx, endIdx),
+            documents: documents.slice(startIdx, endIdx),
+            metadatas: metadatas.slice(startIdx, endIdx),
+        });
+
+        startIdx = endIdx;
+    }
+
+    console.log("Done!")
 })
 
