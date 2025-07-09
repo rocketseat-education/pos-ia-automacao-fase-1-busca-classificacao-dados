@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "chromadb": "^3.0.7",
+    "chromadb-default-embed": "^2.14.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

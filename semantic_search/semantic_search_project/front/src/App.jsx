@@ -1,7 +1,11 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { ChromaClient } from "chromadb";
+import { useEffect } from 'react';
+import { env } from "chromadb-default-embed";
+
+env.useBrowserCache = false;
+env.allowLocalModels = false;
 
 const MockMovies = [
   {
@@ -61,25 +65,41 @@ function MovieTag({ tag }){
 }
 
 function MovieCard({ title, tags, synopsis }){
-  return <div class="movie-card" style={{display: "flex", flexDirection: "column", gap: 5, border: "1px solid grey", borderRadius: 10, padding: "10px", height: "250px"}}>
+  return <div className="movie-card" style={{display: "flex", flexDirection: "column", gap: 5, border: "1px solid grey", borderRadius: 10, padding: "10px", height: "250px"}}>
     <h2 style={{margin: 0}}>{title}</h2>
-    <div style={{display: "flex", justifyContent: "center", gap: 5}}>{tags.map(t => <Movietag tag={t}/>)}</div>
+    <div style={{display: "flex", justifyContent: "center", gap: 5}}>{tags.map((t, idx) => <Movietag key={idx} tag={t}/>)}</div>
     <div style={{overflow: "auto", padding: 5}}>{synopsis}</div>
   </div>
 }
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [chromaCollection, setChromaCollection] = useState(null);
+
+  async function queryDatabase(){
+    console.log(await chromaCollection.query({queryTexts: "a movie about space"});)
+  }
+
+  useEffect(() => {
+
+    const initializeChroma = async () => {
+      const chromaClient = new ChromaClient();
+      const collection = await chromaClient.getOrCreateCollection({name: "movies"});
+
+      setChromaCollection(collection);
+    }
+    
+    initializeChroma();
+  }, []);
 
   return (
     <>
       <h1>Movie Recommender</h1>
       <div style={{display: "flex", flexDirection: "column"}}>
         <textarea></textarea>
-        <button>Submit</button>
+        <button onClick={queryDatabase}>Submit</button>
       </div>
-      <div class="movie-list" style={{marginTop: "15px", display: "flex", flexDirection: "column", gap: 5}}>
-        {MockMovies.map(m => <MovieCard {...m} />)}
+      <div className="movie-list" style={{marginTop: "15px", display: "flex", flexDirection: "column", gap: 5}}>
+        {MockMovies.map((m, idx) => <MovieCard key={idx} {...m} />)}
       </div>
 
     </>
