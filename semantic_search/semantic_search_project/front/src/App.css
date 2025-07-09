@@ -1,6 +1,58 @@
 #root {
-  max-width: 1280px;
+  width: 100vw;
   margin: 0 auto;
   padding: 2rem;
+  box-sizing: border-box;
   text-align: center;
+}
+
+.movie-tag {
+  border: 1px solid grey;
+  padding: 5px;
+  font-size: 12px;
+  border-radius: 7px;
+  text-wrap: nowrap;
+}
+
+.movie-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border: 1px solid grey;
+  border-radius: 10px;
+  padding: 10px;
+  height: 250px;
+}
+
+.movie-title {
+  margin: 0;
+}
+
+.tag-container {
+  display: flex;
+  overflow-x: auto;
+  min-height: 50px;
+}
+
+.tag-holder {
+  display: flex;
+  gap: 5px;
+  margin: 0 auto;
+}
+
+.synopsis {
+  overflow: auto;
+  padding: 5px;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-list {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
