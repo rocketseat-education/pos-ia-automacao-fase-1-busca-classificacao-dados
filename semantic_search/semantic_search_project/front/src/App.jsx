@@ -7,12 +7,14 @@ import ErrorIndicator from './components/ErrorIndicator';
 import useChroma from './database/init';
 import query from './database/query';
 
+const CHROMA_COLLECTION_NAME = "movies_gemini";
+
 function App() {
   
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [queryText, setQueryText] = useState("");
-  const [collection, isConnected] = useChroma();
+  const [collection, isConnected] = useChroma(CHROMA_COLLECTION_NAME);
   const [error, setError] = useState(null);
 
   async function queryDatabase() {

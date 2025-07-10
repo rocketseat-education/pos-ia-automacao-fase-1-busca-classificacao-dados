@@ -5,7 +5,7 @@ import { env } from "chromadb-default-embed";
 env.useBrowserCache = false;
 env.allowLocalModels = false;
 
-export default function useChroma (){
+export default function useChroma (collectionName){
     const [chromaCollection, setChromaCollection] = useState(null);
     const [isConnected, setIsConnected] = useState(false);
 
@@ -13,7 +13,7 @@ export default function useChroma (){
         const initializeChroma = async () => {
           const chromaClient = new ChromaClient();
           const collection = await chromaClient.getOrCreateCollection({ 
-            name: "movies",
+            name: collectionName,
             space: "cosine"
            });
     
