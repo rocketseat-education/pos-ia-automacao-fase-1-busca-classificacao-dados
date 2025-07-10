@@ -4,3 +4,21 @@
   padding: 2rem;
   text-align: center;
 }
+
+.img-path-input{
+  width: 100%;
+}
+
+.classify-button {
+   margin: 10px;
+}
+
+.captioned-image{
+  display: "flex";
+  flex-direction: "column";
+}
+
+.image {
+  width: 100%;
+  border-radius: 10px;
+}
